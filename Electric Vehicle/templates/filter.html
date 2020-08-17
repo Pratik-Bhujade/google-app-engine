@@ -1,0 +1,95 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Filter EV</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body {
+            background-color:#121212;
+            font-size:20px;
+        }
+
+        div{
+            color:white;
+        }
+
+        a {
+            color :#19cffc;
+            text-decoration: none; 
+        }
+        
+        input {
+            border: 0;
+            outline: 0;
+            background: transparent;
+            border-bottom: 1px solid white;
+            color:white;
+        }
+
+        ::placeholder{
+            color:white;
+        }
+
+        .vertical-center {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="text-center">
+    <div class="vertical-center">
+    <div id="cover" class="container bg-dark col-md-6">
+        <h1>Filter EV</h1>
+            <p><a href='/'>Home</a> | <a href='/addvehicle'>Add vehicle</a> | <a href='/comparevehicle'>Compare vehicles</a> | <a href='/reviewvehicle'>Review vehicles</a></p>
+            
+            <form class="col-12" id="test" method="POST" action="/filtervehicle">
+                {% for message in messages %}
+                    {{ message | safe}}
+                {% endfor %}
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">Vehicle Name</label>
+                    <input id="name" name="vehicle_name" placeholder="Vehicle Name" class="col-sm-9" value="" type="text">
+                </div><br>
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">Vehicle Manufacturer</label>
+                    <input id="manufacturer" name="vehicle_manufacturer" placeholder="Vehicle Manufacturer" class="col-sm-9" value="" type="text">
+                </div><br>
+                <div class="form-row">
+                <label class="col-sm-2 col-form-label">Year</label>
+                <input id="lyear" name="lyear" placeholder="Start" class="col-sm-4"  value="" type="number">
+                <label class="col-sm-2 col-form-label">Year</label>
+                <input id="hyear" name="hyear" placeholder="End" class="col-sm-4"  value="" type="number">
+                </div><br><br>
+                <div class="form-row">
+                <label class="col-sm-2 col-form-label">Battery</label>
+                <input id="lbattery" name="lbatterySize" placeholder="Start" class="col-sm-4"  value="" type="number">
+                <label class="col-sm-2 col-form-label">Battery</label>
+                <input id="hbattery" name="hbatterySize" placeholder="End" class="col-sm-4"  value="" type="number">
+                </div><br><br>
+                <div class="form-row">
+                <label class="col-sm-2 col-form-label">WLTP</label>
+                <input id="lwltp" name="lwltpRange" placeholder="Start" class="col-sm-4"  value="" type="number">
+                <label class="col-sm-2 col-form-label">WLTP</label>
+                <input id="hwltp" name="hwltpRange" placeholder="End" class="col-sm-4"  value="" type="number">
+                </div><br><br>
+                <div class="form-row">
+                <label class="col-sm-2 col-form-label">Cost</label>
+                <input id="lcost" name="lcost" placeholder="Start" class="col-sm-4"  value="" type="number">
+                <label class="col-sm-2 col-form-label">Cost</label>
+                <input id="hcost" name="hcost" placeholder="End" class="col-sm-4"  value="" type="number">
+                </div><br><br>
+                <div class="form-row">
+                <label class="col-sm-2 col-form-label">Power</label>
+                <input id="lpower" name="lpower" placeholder="Start" class="col-sm-4"  value="" type="number">
+                <label class="col-sm-2 col-form-label">Power</label>
+                <input id="hpower" name="hpower" placeholder="End" class="col-sm-4"  value="" type="number">
+                </div>
+                <br><input class="form-control col-md-4 btn btn-info" value="Submit" type="submit">
+            </form>                
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

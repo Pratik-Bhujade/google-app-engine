@@ -1,0 +1,60 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Task Board List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body {
+            background-color:#121212;
+            font-size:20px;
+            color:white;
+        }
+
+        a {
+            color :#19cffc;
+            text-decoration: none; 
+        }
+        
+        input {
+            border: 0;
+            outline: 0;
+            background: transparent;
+            border-bottom: 1px solid white;
+            color:white;
+        }
+
+        ::placeholder{
+            color:white;
+        }
+
+        .vertical-center {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="text-center">
+    
+    <div class="vertical-center">
+    <div id="cover" class="container bg-dark col-md-6">
+        <h1>Task Board list</h1>
+        <p><a href='/'>Home</a> | <a href='/createboard'>Create Board</a>
+        {% if user %}
+            {% if taskboards | length > 0 %}
+                    {% for taskboard in taskboards %}
+                        <p><h3>{% if taskboard.key.id()|string in user.created_boards %}Owner - {% endif %}<a href="/viewboard?board={{ taskboard.key.id() }}">{{ taskboard.taskBoardName }}</a></h3></p>
+                    {% endfor %}
+            {% else %}
+                <p><h5>{{ message | safe }}</h5></p>
+            {% endif %}
+        {% else %}
+            <p><h5>{{ message | safe }}</h5></p>
+        {% endif %}
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

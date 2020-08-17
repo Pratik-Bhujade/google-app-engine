@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Welcome</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
+    <style>
+        body{
+            font-family: Comic sans Ms
+        }
+        .navlink {
+            color:black
+        }
+        .cent {
+            margin: 0 auto;
+            float: none; 
+            margin-bottom: 10px;
+        }
+        input {
+            border: 0;
+            outline: 0;
+            background: transparent;
+            border-bottom: 1px solid white;
+            color:white;
+        }
+    </style>
+</head>
+<body class="text-center">
+    {% if user %}
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-white bg-white static-top">
+                <div class="container">
+                <a class="navlink navbar-brand" href="/">Instagram</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="navlink nav-link" href="/">Home</a>
+                        <span class="sr-only">(current)</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navlink nav-link" href="/createpost">Create Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class=" navlink nav-link" href="/usersearch">Search</a>
+                    </li>
+                    </ul>
+                </div>
+                </div>
+        </nav>   
+        {% if profile_user %}
+            <h1>{{ profile_user.user_email }}</h1>
+            <div><a href="/followers?user={{ profile_user.key.id() }}">Followers : {{ profile_user.user_followers | length}}</a></div>
+            <div><a href="/following?user={{ profile_user.key.id() }}">Following : {{ profile_user.user_following | length }}</a></div><br>
+            {% if profile_user.key.id() not in logged_user.user_following %}
+                <form method="POST" action="/follow?user={{ profile_user.key.id() }}">
+                    <input class="form-control col-sm-1 btn btn-info" type="submit" value="Follow">
+                </form>
+            {% elif profile_user.key.id() in logged_user.user_following %}
+                <form method="POST" action="/unfollow?user={{ profile_user.key.id() }}">
+                    <input class="form-control col-sm-1 btn btn-info" type="submit" value="Unfollow">
+                </form>
+            {% endif %}
+        {%elif logged_user%}
+            <h1>{{ logged_user.user_email }}</h1>
+            <div><a href="/followers?user={{ logged_user.key.id() }}">Followers : {{ logged_user.user_followers | length}}</a></div>
+            <div><a href="/following?user={{ logged_user.key.id() }}">Following : {{ logged_user.user_following | length }}</a></div>
+        {% endif %}
+        {% for post in posts %}
+            <div>
+                <br>
+                <div class="cent card col-sm-5">
+                        <div class="card-body">     
+                        <img class="card-img-top" style="height: 400px; width: 100%;" src="/image?post={{ post.key.id() }}" data-holder-rendered="true">   
+                        <h4 class="card-title"></h4>     
+                        <p class="card-text">Caption : {{ post.post_caption }}</p>
+                        <p class="card-text">By : {{ post.post_user }}</p>
+                        <form class="col-12" method="POST" action="/submitcomment?post={{ post.key.id() }}">
+                            <div class="form-row">
+                                <input type="text" class="form-control col-sm-8" name="usercomment" maxlength="200" placeholder="Comment">
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" class="form-control col-sm-3 btn btn-info" value="Comment">
+                            </div>
+                        </form>
+                        {% for commentlist in post_comments %}
+                            {% if commentlist | length > 0 and commentlist[0].user_post == post.key.id() | string %}
+                                {% if commentlist | length <= 5 %}
+                                    {% for comment in commentlist %}
+                                            <p>{{ comment.user_email }} : {{ comment.user_comment }}</p>
+                                    {% endfor %}
+                                {% elif commentlist | length > 5 %}
+                                    {% for comment in commentlist[:5] %}
+                                        {% if comment.user_post == post.key.id() | string %}
+                                            <p>{{ comment.user_email }} : {{ comment.user_comment }}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    <button class="form-control col-sm-4 btn btn-success" onclick="window.location.href='/viewpost?post={{ post.key.id() }}'">More Comments</button>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                </div>
+                </div>
+                <br>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="cent card col-sm-5">
+            <div class="card-body">     
+            <h4 class="card-title">{{ message | safe }}</h4>
+        </div>
+        </div>
+    {% endif %}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

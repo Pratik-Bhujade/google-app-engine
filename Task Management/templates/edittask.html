@@ -1,0 +1,84 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Task Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body {
+            background-color:#121212;
+            font-size:20px;
+            color:white;
+        }
+
+        a {
+            color :#19cffc;
+            text-decoration: none; 
+        }
+        
+        input {
+            border: 0;
+            outline: 0;
+            background: transparent;
+            border-bottom: 1px solid white;
+            color:white;
+        }
+
+        ::placeholder{
+            color:white;
+        }
+
+        .vertical-center {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="text-center">
+    
+    <div class="vertical-center">
+    <div id="cover" class="container bg-dark col-md-6">
+        {% if user %}
+            <h1>Edit Task Details</h1>
+            <p><a href='/'>Home</a> | <a href='/boardlist'>View Boards</a> | <a href='/createboard'>Create Board</a> | <a href="/viewboard?board={{ taskboard.key.id() }}">Back</a></p>
+            <form class="col-12" id="test" method="POST" action="/taskdetails?task={{ task.key.id() }}">
+                    <div class="form-row">
+                        <label class="col-sm-4 col-form-label">Task Title:</label>
+                        <input id="task_description" name="task_description" placeholder="{{ task.taskDescription }}" class="col-sm-7" readonly value="" type="text">
+                    </div><br>
+                    <div class="form-row">
+                        <label class="col-sm-4 col-form-label">Task Board:</label>
+                        <input id="task_board" name="task_board" placeholder="{{ taskboard.taskBoardName }}" class="col-sm-7" readonly value="" type="text">
+                    </div><br>
+                    <div class="form-row">
+                        <label class="col-sm-4 col-form-label">Task Owner:</label>
+                        <input id="task_owner" name="task_owner" placeholder="{{ task.taskUser }}" class="col-sm-7" readonly value="" type="text">
+                    </div><br>
+                    <div class="form-row">
+                        <label class="col-sm-4 col-form-label">Change Task Owner:</label>
+                        <select class="form-control col-sm-7" id="userlist" name="userlist">
+                        <option value="" selected>Select User</option>
+                            {% for user_obj in user_list %}
+                                {% if user_obj.user_email != task.taskUser and (taskboard.key.id()|string in user_obj.added_boards or taskboard.key.id()|string in user_obj.created_boards) %}
+                                    <option value="{{ user_obj.user_email }}">{{ user_obj.user_email }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div><br>
+                    <div class="form-row">
+                        <label class="col-sm-4 col-form-label">Task Due Date:</label>
+                        <input id="name" name="task_duedate" class="col-sm-7" value="{{ task.taskDueDate }}" type="date">
+                    </div>
+                    <br><input name="action" class="form-control col-md-5 btn btn-info" value="Submit" type="submit">
+            </form>
+            <form class="col-12" id="test" method="POST" action="/taskdetails?task={{ task.key.id() }}">
+                <input name="action" class="form-control col-md-5 btn btn-danger" value="Delete" type="submit">
+            </form>
+        {% endif %}
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

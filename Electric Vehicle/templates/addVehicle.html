@@ -1,0 +1,87 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Add EV</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body {
+            background-color:#121212;
+            font-size:20px;
+        }
+
+        div{
+            color:white;
+        }
+        
+        input {
+            border: 0;
+            outline: 0;
+            background: transparent;
+            border-bottom: 1px solid white;
+            color:white;
+        }
+
+        a {
+            color :#19cffc;
+            text-decoration: none; 
+        }
+
+        ::placeholder{
+            color:white;
+        }
+
+        .vertical-center {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="text-center">
+    <div class="vertical-center">
+    <div id="cover" class="container bg-dark col-md-6">
+        {% if user %}
+            <form class="col-12" id="test" method="POST" action="/addvehicle">
+                <h1>Add EV</h1>
+                <p><a href='/'>Home</a> | <a href='/filtervehicle'>Search vehicle</a> | <a href='/comparevehicle'>Compare vehicles</a> | <a href='/reviewvehicle'>Review Vehicles</p>
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">Vehicle Name</label>
+                    <input id="name" name="vehicle_name" placeholder="Vehicle Name" class="col-sm-9" required="true" value="" type="text">
+                </div><br>
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">Vehicle Manufacturer</label>
+                    <input id="manufacturer" name="vehicle_manufacturer" placeholder="Vehicle Manufacturer"  class="col-sm-9" required="true" value="" type="text">
+                </div><br>
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">Year</label>
+                    <input id="year" name="year" placeholder="Year" class="col-sm-9" required="true" value="" type="number">
+                </div><br>
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">Battery</label>
+                    <input id="battery" name="battery" placeholder="Battery Size" class="col-sm-9" required="true" value="" type="number">
+                </div><br>
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">WLTP Range</label>
+                    <input id="wltp" name="wltp" placeholder="WLTP Range" class="col-sm-9" required="true" value="" type="number">
+                </div><br>
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">Cost</label>
+                    <input id="cost" name="cost" placeholder="Cost" class="col-sm-9" required="true" value="" type="number">
+                </div><br>
+                <div class="form-row">
+                    <label class="col-sm-3 col-form-label">Power</label>
+                    <input id="power" name="power" placeholder="Power" class="col-sm-9" required="true" value="" type="number">
+                </div>
+                <br><input class="form-control btn btn-info col-sm-12" value="Submit" type="submit">
+            </form>                
+        {% else %}
+            <p><h3>Hello friend</h3></p>
+            <p><h5>{{ message | safe }}</h5></p>
+        {% endif %}
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

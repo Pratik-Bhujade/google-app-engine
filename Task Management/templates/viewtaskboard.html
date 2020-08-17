@@ -1,0 +1,149 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Task Board Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body {
+            background-color:#121212;
+            font-size:20px;
+            color:white;
+        }
+
+        a {
+            color :#19cffc;
+            text-decoration: none; 
+        }
+        
+        input {
+            border: 0;
+            outline: 0;
+            background: transparent;
+            border-bottom: 1px solid white;
+            color:white;
+        }
+
+        ::placeholder{
+            color:white;
+        }
+
+        .vertical-center {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="text-center">
+    
+    <div class="vertical-center">
+    <div id="cover" class="container bg-dark col-md-7">
+        {% if taskboard %}
+            <h1>Task Board Details</h1>
+            <p><a href='/'>Home</a> | <a href='/boardlist'>View Boards</a> {% if taskboard.key.id()|string in user.created_boards %}| <a href="/boarddetails?board={{ taskboard.key.id() }}">Edit Board</a>{% endif %}</p>
+            <p><h3>Task Board Name : {{ taskboard.taskBoardName }}</h3></p>
+                <form method="POST" onsubmit="return validate()" action="/viewboard?board={{ taskboard.key.id() }}">
+                    <label class="col-sm-5 col-form-label" style="color :#19cffc">ADD USER TO BOARD</label>
+                    <div class="form-row">
+                        <label class="col-sm-2 col-form-label">Add user:</label>
+                        <select class="form-control col-sm-6" id="userlist" name="userlist">
+                            <option value="" selected>Select User</option>
+                            {% if taskboard.key.id()|string in user.created_boards %}
+                                {% for user_obj in user_list %}
+                                    {% if user_obj.user_email != user.user_email and taskboard.key.id()|string not in user_obj.added_boards %}
+                                        <option value="{{ user_obj.key.id() }}">{{ user_obj.user_email }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                        &nbsp&nbsp&nbsp&nbsp<input name="action" class="form-control col-sm-2 btn btn-info" value="Invite User" type="submit">
+                    </div>
+                    
+                </form>
+                <form method="POST" action="/createtask?board={{ taskboard.key.id() }}">
+                    <label class="col-sm-5 col-form-label" style="color :#19cffc">CREATE TASK</label>
+                    <div class="form-row">
+                        <label class="col-sm-2 col-form-label">Task Title:</label>
+                        <input id="name" name="task_title" placeholder="Task Title" class="col-sm-3" required="true" value="" type="text">
+                        <label class="col-sm-3 col-form-label">Task Due Date:</label>
+                        <input id="name" name="task_duedate" class="col-sm-3" required="true" value="" type="date">
+                    </div><br>
+                    <div class="form-row">
+                        <label class="col-sm-2 col-form-label">Add user:</label>
+                        <select class="form-control col-sm-6" id="userlist" name="userlist">
+                            <option value="" selected>Select User</option>
+                            {% for user_obj in user_list %}
+                                {% if taskboard.key.id()|string in user_obj.added_boards or taskboard.key.id()|string in user_obj.created_boards %}
+                                    <option value="{{ user_obj.key.id() }}">{{ user_obj.user_email }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        &nbsp&nbsp&nbsp&nbsp<input name="action" class="form-control col-sm-2 btn btn-info" value="Create Task" type="submit">
+                    </div>
+                </form>
+                <label class="col-sm-3 col-form-label" style="color :#19cffc">ACTIVE TASKS</label>
+                {% if tasks|length > 0 %}
+                    <form method="POST" action="/endtasks?board={{ taskboard.key.id() }}">
+                        <table class="table table-bordered" style="color:white;">
+                            <tr>
+                                <td>Task Name</td>
+                                <td>User</td>
+                                <td>Task Due Date</td>
+                                <td>Complete</td>
+                            </tr>
+                            {% for task in tasks %}
+                                {% if task.taskFlag == True %}
+                                    {% if task.taskUser %}
+                                        <tr>
+                                    {% else %}
+                                        <tr style="color:red">
+                                    {% endif %}
+                                        <td><a href="/taskdetails?task={{ task.key.id() }}">{{ task.taskDescription }}</a></td>
+                                        {% if task.taskUser %}
+                                            <td>{{ task.taskUser }}</td>
+                                        {% else %}
+                                            <td>Unassigned</td>
+                                        {% endif %}
+                                        <td>{{ task.taskDueDate }}</td>
+                                        {% if task.taskUser %}
+                                            <td><input type="checkbox" value="{{ task.key.id() }}" name="tasklist"></td>
+                                        {% else %}
+                                            <td>-</td>
+                                        {% endif %}
+                                        
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                        <input name="action" class="form-control col-md-4 btn btn-info" value="Submit" type="submit">
+                    </form>
+                {% else %}
+                    <label class="col-sm-12 col-form-label">-- No Active Tasks --</label>
+                {% endif %}
+                <div class="form-row">
+                <h4 class="col-sm-6">Number of active tasks : {{ active }}</h4>
+                <h4 class="col-sm-6">Number of completed tasks : {{ completed }}</h4>
+                </div>
+                <div class="form-row">
+                <h4 class="col-sm-6">Total tasks : {{ total }}</h4>
+                <h4 class="col-sm-6">Total tasks completed today : {{ completed_today }}</h4>
+                </div>
+        {% else %}
+            <p><h5>{{ message | safe }}</h5></p>
+        {% endif %}
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+     <script>
+        function validate(){
+            var select = document.getElementById("userlist")
+            if (select.value == "") {
+                alert("Invalid selection")
+                return false
+            }
+        }
+    </script>
+</body>
+</html>
