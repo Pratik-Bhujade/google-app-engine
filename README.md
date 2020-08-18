@@ -16,4 +16,9 @@ $ cd [path_to_project]
 ```shell
 $ python [path_to_google_cloud_sdk]/bin/dev_appserver.py [path_to_project]/app.yaml
 ```
+### 3. To access Module go to [localhost:8080][1]
 
+### 4. To access Admin console go to [localhost:8000][2]
+
+[1]: http://localhost:8080/
+[2]: http://localhost:8000/
