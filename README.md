@@ -11,55 +11,9 @@
 [7]: https://console.developers.google.com/project
 [8]: https://console.developers.google.com
 
-## Do this first
-In this section you will start your [Google Cloud Shell][9] and clone the
- application code repository to it.
-
-1. [Open the Cloud Console][10]
-
-2. Click the Google Cloud Shell icon in the top-right and wait for your shell
- to open:
-
- ![](docs/img/cloud-shell.png)
-
-3. Set project ID in the session. (Specify your project ID in `[PROJECT_ID]` below.)
-
-  ```shell
-  $ gcloud config set project [PROJECT_ID]
-  ```
-  
-4. Clone the lab repository in your cloud shell, then `cd` into that dir:
-
-  ```shell
-  $ git clone https://github.com/GoogleCloudPlatform/appengine-photoalbum-example.git
-  Cloning into 'appengine-photoalbum-example'...
-  ...
-
-  $ cd appengine-photoalbum-example
-  ```
-
-[9]: https://cloud.google.com/cloud-shell/docs/
-[10]: https://console.cloud.google.com/
-
-## Customize the language used for tag names
-
-Open 'app.yaml' with a text editor and replace the language code to your
- favorite one from the [supported languages][11].
-
-You can replace the timezone code used for timestamps, too.
-
-```yaml
-env_variables:
-  LANG_TAG: 'it'              <-- change to your favorite language code.
-  TIMESTAMP_TZ: 'Europe/Rome' <-- change to your favorite timezone code.
-```
-
-[11]: https://cloud.google.com/translate/docs/languages
-
 ## Deploy the application
 
 ```shell
-$ pip install -r requirements.txt -t lib
 $ gcloud app create
 $ gcloud datastore indexes create index.yaml
 $ gcloud app deploy
